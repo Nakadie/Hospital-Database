@@ -1,5 +1,0 @@
-numpy
-pyqt5
-pillow
-gym
-gym-retro
