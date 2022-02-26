@@ -1,7 +1,6 @@
 """
-Hospital patient data base tool used to track patients and ailments.
+This is the file for initializing all GUI elements for the database.
 """
-import sys
 from PySide6.QtWidgets import *
 import models
 
@@ -14,8 +13,6 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
         self.w = None
         self.initUI()
-        self.New_Patient_window = New_Patient_window()
-        self.Search_window = Search_window()
 
     def initUI(self):
         # initialize ui for main window
@@ -36,18 +33,18 @@ class MainWindow(QMainWindow):
         """
         Open new window to create a new patient.
         """
-        self.newpat = New_Patient_window()
+        self.newpat = NewPatientWindow()
         self.newpat.show()
 
     def goto_search(self):
         """
         Open new window for searching.
         """
-        self.search = Search_window()
+        self.search = SearchWindow()
         self.search.show()
 
 
-class New_Patient_window(QDialog):
+class NewPatientWindow(QDialog):
     """
     This "window" is a QDialog.
     It will appear as a free-floating window.
@@ -59,7 +56,7 @@ class New_Patient_window(QDialog):
         super().__init__()
 
         self.initUI()
-        self.display_pat = Display_patient()
+        self.display_pat = DisplayPatient()
 
     def initUI(self):
 
@@ -71,7 +68,7 @@ class New_Patient_window(QDialog):
         self.weight = QLineEdit()
         self.blood = QComboBox()
         self.patnum = str(models.database().get_patnum())
-        self.sex = "s"
+        self.sex = QComboBox()
         layout = QFormLayout()
 
         QBtn = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
@@ -81,6 +78,7 @@ class New_Patient_window(QDialog):
         self.setGeometry(300, 300, 290, 150)
         self.setWindowTitle("New Patient Entry")
         self.blood.addItems(["A+", "O+", "B+", "AB+", "A-", "O-", "B-", "AB-"])
+        self.sex.addItems(["Male", "Female"])
 
         layout.addRow(("Patient #:"), QLabel(self.patnum))
         layout.addRow(("Last Name:"), self.lname)
@@ -89,8 +87,7 @@ class New_Patient_window(QDialog):
         layout.addRow(("Height (cm):"), self.hgt)
         layout.addRow(("Weight (kgs):"), self.weight)
         layout.addRow(("Blood Type:"), self.blood)
-        layout.addRow(QLabel("Sex:"), QHBoxLayout())
-        layout.addRow(QRadioButton("Male"), QRadioButton("Female"))
+        layout.addRow(QLabel("Sex:"), self.sex)
         layout.addRow(self.buttonBox)
 
         self.buttonBox.accepted.connect(self.create_pat)
@@ -111,6 +108,7 @@ class New_Patient_window(QDialog):
             self.weight.text(),
             self.hgt.text(),
             self.blood.currentText(),
+            self.sex.currentText()
         )
         models.database().add_db(new_pat)
 
@@ -122,14 +120,14 @@ class New_Patient_window(QDialog):
         self.display_pat.hgt.setText(self.hgt.text())
         self.display_pat.weight.setText(self.weight.text())
         self.display_pat.blood.setText(self.blood.currentText())
-        self.sex = QLabel()
+        self.display_pat.sex.setText(self.sex.currentText())
 
         self.display_pat.show()
 
         self.close()
 
 
-class Search_window(QDialog):
+class SearchWindow(QDialog):
     """
     This "window" is a QWidget. If it has no parent, it
     will appear as a free-floating window.
@@ -138,7 +136,7 @@ class Search_window(QDialog):
 
     def __init__(self):
         super().__init__()
-        self.display_pat = Display_patient()
+        self.display_pat = DisplayPatient()
 
         self.initUI()
 
@@ -178,10 +176,20 @@ class Search_window(QDialog):
         Will display new window of patient info if found.
         will display a message if not.
         """
-        names = models.Patient.get_all_pats()
-        for models.Patient.lname in names:
-            if models.Patient.lname == self.lname.text().capitalize():
-                print("found")
+        allpats = models.Patient.get_all_pats()
+        for i in range(len(allpats)):
+            if allpats[i].lname == self.lname.text().capitalize():
+                self.display_pat.patnum.setText(str(int(i)+ 1))
+                self.display_pat.lname.setText((models.Patient.get_all_pats())[(int(i))].lname)
+                self.display_pat.fname.setText((models.Patient.get_all_pats())[(int(i))].fname)
+                self.display_pat.age.setText((models.Patient.get_all_pats())[(int(i))].age)
+                self.display_pat.hgt.setText((models.Patient.get_all_pats())[(int(i))].height)
+                self.display_pat.weight.setText((models.Patient.get_all_pats())[(int(i))].weight)
+                self.display_pat.blood.setText((models.Patient.get_all_pats())[(int(i))].bloodtype)
+                self.display_pat.sex.setText((models.Patient.get_all_pats())[(int(i))].sex)
+
+                self.close()
+                self.display_pat.show()
             else:
                 self.namerr.setText(self.lname.text().capitalize() + ": Not Found")
 
@@ -194,14 +202,14 @@ class Search_window(QDialog):
         numbers = [x.patnum for x in models.Patient.get_all_pats()]
         for i in numbers:
             if int(i) == int(self.patnum.text()):
-                self.display_pat.patnum.setText(str(int(i) - 1))
+                self.display_pat.patnum.setText(str(int(i)))
                 self.display_pat.lname.setText((models.Patient.get_all_pats())[(int(i) - 1)].lname)
                 self.display_pat.fname.setText((models.Patient.get_all_pats())[(int(i) - 1)].fname)
                 self.display_pat.age.setText((models.Patient.get_all_pats())[(int(i) - 1)].age)
                 self.display_pat.hgt.setText((models.Patient.get_all_pats())[(int(i) - 1)].height)
                 self.display_pat.weight.setText((models.Patient.get_all_pats())[(int(i) - 1)].weight)
                 self.display_pat.blood.setText((models.Patient.get_all_pats())[(int(i) - 1)].bloodtype)
-                self.sex = QLabel()
+                self.display_pat.sex.setText((models.Patient.get_all_pats())[(int(i) - 1)].sex)
 
                 self.close()
                 self.display_pat.show()
@@ -209,7 +217,7 @@ class Search_window(QDialog):
                 self.numerr.setText("Patient #" + self.patnum.text() + ": Not Found")
 
 
-class Display_patient(QWidget):
+class DisplayPatient(QWidget):
     """
     This "window" is a QWidget. If it has no parent, it
     will appear as a free-floating window.
@@ -245,3 +253,4 @@ class Display_patient(QWidget):
         layout.addRow(("Height (cm):"), self.hgt)
         layout.addRow(("Weight (kgs):"), self.weight)
         layout.addRow(("Blood Type:"), self.blood)
+        layout.addRow(("Sex:"), self.sex)

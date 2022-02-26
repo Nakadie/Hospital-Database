@@ -3,20 +3,19 @@ Hospital patient data base tool used to track patients and ailments.
 """
 
 
-
-
 initializetxt = open("patient_db.txt", "a")
+initializetxt.close()
 
 
 class Patient(object):
     """
     A Patient is a person who has come to see the doctor.
-    they have name, age, weight, height, gender
+    they have patient number, last name, firstname, age, weight, height, bloodtype, sex.
     """
 
     def __init__(self, patnum, lname, fname, age, weight, height, bloodtype, sex):
         """
-        Initializes a patient with patient number, last name, firstname, age, weight, height, bloodtype
+        Initializes a patient with patient number, last name, firstname, age, weight, height, bloodtype, sex.
         """
         
         self.patnum = patnum
@@ -30,14 +29,14 @@ class Patient(object):
 
     def to_string(self):
         """
-        turns a patient class into a string for storage in the txt file.
+        Turns a patient class into a string for storage in the txt file.
         """
         return f"{self.patnum} {self.lname} {self.fname} {self.age} {self.weight} {self.height} {self.bloodtype} {self.sex} "
 
     @classmethod
     def get_all_pats(cls):
         """
-        get all the patients from the patient_db.txt and initialize them to a class and put in a list.
+        Get all the patients from the patient_db.txt and initialize them to a class and put in a list.
         """
         all_patients = []
         args = database().patient_strs
@@ -48,7 +47,7 @@ class Patient(object):
 
 class database(object):
     """
-    database is used to open and manipulate the txt file holding all the patient data.
+    Database is used to open and manipulate the txt file holding all the patient data.
     """
 
     def __init__(self):
@@ -87,5 +86,3 @@ class database(object):
             return 1
         else:
             return int(self.patient_strs[-1][0]) + 1
-
-
