@@ -2,6 +2,7 @@
 This is the file for initializing all GUI elements for the database.
 """
 from PySide6.QtWidgets import *
+from PySide6.QtGui import QIntValidator, QDoubleValidator
 import models
 
 class MainWindow(QMainWindow):
@@ -70,6 +71,9 @@ class NewPatientWindow(QDialog):
         self.patnum = str(models.database().get_patnum())
         self.sex = QComboBox()
         layout = QFormLayout()
+        self.decimals = QDoubleValidator(0, 3, 3)
+        self.hgt.setValidator(self.decimals)
+        self.weight.setValidator(self.decimals)
 
         QBtn = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
         self.buttonBox = QDialogButtonBox(QBtn)
@@ -152,6 +156,8 @@ class SearchWindow(QDialog):
         self.search2 = QPushButton("Search")
         self.namerr = QLabel()
         self.numerr = QLabel()
+        self.onlyInt = QIntValidator()
+        self.patnum.setValidator(self.onlyInt)
 
         # Layout.
         layout.addRow("", self.namerr)
