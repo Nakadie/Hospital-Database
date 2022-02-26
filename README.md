@@ -9,13 +9,13 @@ Possible future updates will be:
 - SQL upgrade.
 - Ability to list all patients and select from a list.
 - Edit existing patients.
-
+- Improve search functionality by removing case sensitivity for names and allow spaces in names.
 
 
 Known issues being worked on:
 - Patients who have the same last name cannot be differentiated. 
 - Sex not being displayed correctly. ### fixed ###
-- Name case sensitivity changes.
+- Name case sensitivity search errors.
 
 
 
