@@ -19,7 +19,7 @@ Known issues being worked on:
 - Patients who have the same last name cannot be differentiated. 
 - Sex not being displayed correctly. ### fixed ###
 - Name case sensitivity search errors.
-
+- Two part names (eg: James Junior) will cause errors due to search functionality of the database.
 
 
 Here is a demo of the project.
