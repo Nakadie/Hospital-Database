@@ -4,12 +4,15 @@ This is a sample project that I have worked on that is able to take inputs for a
 
 I realize that SQL is a better database handling tool but at the time of completing the project I was under time constraints to push the project out quickly. I improvised a workable database using the knowlege I already have. I deliberately wrote my classes so that I will be able to implement SQL at a later date. 
 
-Possible future updates will be: 
-- Time stamped notes under patients file.
+Future Updates in order of planned implementation: 
 - SQL upgrade.
+- Tests.
+- Time stamped notes under patients file.
+
 - Ability to list all patients and select from a list.
 - Edit existing patients.
 - Improve search functionality by removing case sensitivity for names and allow spaces in names.
+
 
 
 Known issues being worked on:
