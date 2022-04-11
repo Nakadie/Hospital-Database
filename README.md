@@ -21,6 +21,13 @@ Known issues being worked on:
 - Name case sensitivity search errors.
 - Two part names (eg: James Junior) will cause errors due to search functionality of the database.
 
+Versions
+1.0
+-Functionally complete but feature lacking with a .txt based database.
+
+1.5 (Work in progress)
+-Swapped the .txt database with proper SQL db.
+
 
 Here is a demo of the project.
 
