@@ -68,7 +68,7 @@ class NewPatientWindow(QDialog):
         self.hgt = QLineEdit()
         self.weight = QLineEdit()
         self.blood = QComboBox()
-        self.patnum = str(models.database().get_patnum())
+        # self.patnum = str(models.database().get_patnum())
         self.sex = QComboBox()
         layout = QFormLayout()
         self.decimals = QDoubleValidator(0, 3, 3)
@@ -84,7 +84,7 @@ class NewPatientWindow(QDialog):
         self.blood.addItems(["A+", "O+", "B+", "AB+", "A-", "O-", "B-", "AB-"])
         self.sex.addItems(["Male", "Female"])
 
-        layout.addRow(("Patient #:"), QLabel(self.patnum))
+        # layout.addRow(("Patient #:"), QLabel(self.patnum))
         layout.addRow(("Last Name:"), self.lname)
         layout.addRow(("First Name:"), self.fname)
         layout.addRow(("Age:"), self.age)
@@ -105,7 +105,7 @@ class NewPatientWindow(QDialog):
         """
         # initialize patient.
         new_pat = models.Patient(
-            self.patnum,
+            # self.patnum,
             self.lname.text(),
             self.fname.text(),
             self.age.text(),
@@ -117,7 +117,7 @@ class NewPatientWindow(QDialog):
         models.database().add_db(new_pat)
 
         # preparing variables for next window.
-        self.display_pat.patnum.setText(self.patnum)
+        # self.display_pat.patnum.setText(self.patnum)
         self.display_pat.lname.setText(self.lname.text())
         self.display_pat.fname.setText(self.fname.text())
         self.display_pat.age.setText(self.age.text())
@@ -182,22 +182,23 @@ class SearchWindow(QDialog):
         Will display new window of patient info if found.
         will display a message if not.
         """
-        allpats = models.Patient.get_all_pats()
-        for i in range(len(allpats)):
-            if allpats[i].lname == self.lname.text().capitalize():
-                self.display_pat.patnum.setText(str(int(i)+ 1))
-                self.display_pat.lname.setText((models.Patient.get_all_pats())[(int(i))].lname)
-                self.display_pat.fname.setText((models.Patient.get_all_pats())[(int(i))].fname)
-                self.display_pat.age.setText((models.Patient.get_all_pats())[(int(i))].age)
-                self.display_pat.hgt.setText((models.Patient.get_all_pats())[(int(i))].height)
-                self.display_pat.weight.setText((models.Patient.get_all_pats())[(int(i))].weight)
-                self.display_pat.blood.setText((models.Patient.get_all_pats())[(int(i))].bloodtype)
-                self.display_pat.sex.setText((models.Patient.get_all_pats())[(int(i))].sex)
+        pat = models.database.search_by_lname(str(self.lname.text()))
+        
+        if pat == []:
+            self.namerr.setText(self.lname.text().capitalize() + ": Not Found")
+        elif len(pat) == 1:
+            self.display_pat.patnum.setText(str(pat[0][0]))
+            self.display_pat.lname.setText(str(pat[0][1]))
+            self.display_pat.fname.setText(pat[0][2])
+            self.display_pat.age.setText(str(pat[0][3]))
+            self.display_pat.hgt.setText(str(pat[0][5]))
+            self.display_pat.weight.setText(str(pat[0][4]))
+            self.display_pat.blood.setText(pat[0][6])
+            self.display_pat.sex.setText(pat[0][7])
 
-                self.close()
-                self.display_pat.show()
-            else:
-                self.namerr.setText(self.lname.text().capitalize() + ": Not Found")
+            self.close()
+            self.display_pat.show()
+   
 
     def patnum_search(self):
         """
@@ -205,22 +206,22 @@ class SearchWindow(QDialog):
         Will display new window of patient info if found.
         will display a message if not.
         """
-        numbers = [x.patnum for x in models.Patient.get_all_pats()]
-        for i in numbers:
-            if int(i) == int(self.patnum.text()):
-                self.display_pat.patnum.setText(str(int(i)))
-                self.display_pat.lname.setText((models.Patient.get_all_pats())[(int(i) - 1)].lname)
-                self.display_pat.fname.setText((models.Patient.get_all_pats())[(int(i) - 1)].fname)
-                self.display_pat.age.setText((models.Patient.get_all_pats())[(int(i) - 1)].age)
-                self.display_pat.hgt.setText((models.Patient.get_all_pats())[(int(i) - 1)].height)
-                self.display_pat.weight.setText((models.Patient.get_all_pats())[(int(i) - 1)].weight)
-                self.display_pat.blood.setText((models.Patient.get_all_pats())[(int(i) - 1)].bloodtype)
-                self.display_pat.sex.setText((models.Patient.get_all_pats())[(int(i) - 1)].sex)
+        pat = models.database.search_by_patnum(str(self.patnum.text()))
+        if pat == []:
+            self.numerr.setText("Patient #" + self.patnum.text() + ": Not Found")
+        elif len(pat) == 1:
+            self.display_pat.patnum.setText(str(pat[0][0]))
+            self.display_pat.lname.setText(str(pat[0][1]))
+            self.display_pat.fname.setText(pat[0][2])
+            self.display_pat.age.setText(str(pat[0][3]))
+            self.display_pat.hgt.setText(str(pat[0][5]))
+            self.display_pat.weight.setText(str(pat[0][4]))
+            self.display_pat.blood.setText(pat[0][6])
+            self.display_pat.sex.setText(pat[0][7])
 
-                self.close()
-                self.display_pat.show()
-            else:
-                self.numerr.setText("Patient #" + self.patnum.text() + ": Not Found")
+            self.close()
+            self.display_pat.show()
+     
 
 
 class DisplayPatient(QWidget):
