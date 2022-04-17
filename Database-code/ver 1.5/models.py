@@ -1,11 +1,23 @@
-"""
-Hospital patient data base tool used to track patients and ailments.
-"""
+"""This file inizilaizes the SQL database"""
+import sqlite3
 
+conn = sqlite3.connect('patients.db')
 
-initializetxt = open("patient_db.txt", "a")
-initializetxt.close()
+#create cursor
+c = conn.cursor()
 
+#create table if doesnt exist
+c.execute(""" CREATE TABLE IF NOT EXISTS patients (
+                patnum INTEGER PRIMARY KEY AUTOINCREMENT,
+                lname text,
+                fname text,
+                age text,
+                weight text,
+                height text,
+                bloodtype text,
+                sex text,
+                UNIQUE (lname, fname, age, weight, height, bloodtype, sex)
+)""")
 
 class Patient(object):
     """
@@ -13,12 +25,12 @@ class Patient(object):
     they have patient number, last name, firstname, age, weight, height, bloodtype, sex.
     """
 
-    def __init__(self, patnum, lname, fname, age, weight, height, bloodtype, sex):
+    def __init__(self, lname, fname, age, weight, height, bloodtype, sex):
         """
         Initializes a patient with patient number, last name, firstname, age, weight, height, bloodtype, sex.
         """
         
-        self.patnum = patnum
+        
         self.lname = lname.capitalize()
         self.fname = fname.capitalize()
         self.age = age
@@ -27,31 +39,22 @@ class Patient(object):
         self.bloodtype = bloodtype
         self.sex = sex
 
-    def to_string(self):
-        """
-        Turns a patient class into a string for storage in the txt file.
-        """
-        return f"{self.patnum} {self.lname} {self.fname} {self.age} {self.weight} {self.height} {self.bloodtype} {self.sex} "
-
     @classmethod
     def get_all_pats(cls):
         """
-        Get all the patients from the patient_db.txt and initialize them to a class and put in a list.
+        Get all the patients from the patients.db and initialize them to a class and put in a list.
         """
-        all_patients = []
-        args = database().patient_strs
-        for i in args:
-            all_patients.append(cls(*i))
-        return all_patients
+        c.execute('SELECT * FROM patients')
+        return c.fetchall
 
 
 class database(object):
     """
-    Database is used to open and manipulate the txt file holding all the patient data.
+    Database is used to open and manipulate the sql file holding all the patient data.
     """
 
     def __init__(self):
-        self.filename = "patient_db.txt"
+        self.filename = "patients.db"
         self.patient_strs = self.initialize_patients()
 
     def initialize_patients(self):
@@ -63,26 +66,48 @@ class database(object):
         patient_strs = [x.split() for x in patient_strs]
         return patient_strs
 
-    def add_db(self, patient):
+    def add_db(self, pat):
         """
-        Append patient to the end of the patient_db.txt
+        Add patient to patients.db
 
-        patient: a string
+        pat: patient object
         """
+        with conn:
+                c.execute("INSERT OR REPLACE INTO patients VALUES (:patnum, :lname, :fname, :age, :weight, :height, :bloodtype, :sex)", 
+            {
+                'patnum': None,
+                'lname': pat.lname,
+                'fname': pat.fname,
+                'age': pat.age,
+                'weight': pat.weight,
+                'height': pat.height,
+                'bloodtype': pat.bloodtype, 
+                'sex': pat.sex
+                }
+                )
 
-        with open(self.filename, "a+") as file_object:
-            file_object.seek(0)
-            data = file_object.read(100)
-            if len(data) > 0:
-                file_object.write("\n")
-            file_object.write(patient.to_string())
+    def search_by_lname(lname):
+        """
+        Search by name.
+        """
+        with conn:
+            c.execute("SELECT * FROM patients WHERE lname =:lname", {'lname': lname})
+            return c.fetchall()
+
+    def search_by_patnum(num):
+        """
+        Search by patient number.
+        """
+        with conn:
+            c.execute("SELECT * FROM patients WHERE patnum =:patnum", {'patnum': num})
+            return c.fetchall()
 
     def get_patnum(self):
-        """
-        gets the new patient number.
-        """
+        with conn:
+            c.execute('SELECT MAX(patnum) AS maximum FROM patients')
+            result = c.fetchall()
+            if result == None:
+                return '1'
+            else:
+                return str(int(result[0][0]) + 1)
 
-        if self.patient_strs == []:
-            return 1
-        else:
-            return int(self.patient_strs[-1][0]) + 1

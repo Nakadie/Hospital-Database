@@ -68,7 +68,7 @@ class NewPatientWindow(QDialog):
         self.hgt = QLineEdit()
         self.weight = QLineEdit()
         self.blood = QComboBox()
-        # self.patnum = str(models.database().get_patnum())
+        self.patnum = str(models.database().get_patnum())
         self.sex = QComboBox()
         layout = QFormLayout()
         self.decimals = QDoubleValidator(0, 3, 3)
@@ -84,7 +84,7 @@ class NewPatientWindow(QDialog):
         self.blood.addItems(["A+", "O+", "B+", "AB+", "A-", "O-", "B-", "AB-"])
         self.sex.addItems(["Male", "Female"])
 
-        # layout.addRow(("Patient #:"), QLabel(self.patnum))
+        layout.addRow(("Patient #:"), QLabel(self.patnum))
         layout.addRow(("Last Name:"), self.lname)
         layout.addRow(("First Name:"), self.fname)
         layout.addRow(("Age:"), self.age)
@@ -105,7 +105,7 @@ class NewPatientWindow(QDialog):
         """
         # initialize patient.
         new_pat = models.Patient(
-            # self.patnum,
+            
             self.lname.text(),
             self.fname.text(),
             self.age.text(),
@@ -117,7 +117,7 @@ class NewPatientWindow(QDialog):
         models.database().add_db(new_pat)
 
         # preparing variables for next window.
-        # self.display_pat.patnum.setText(self.patnum)
+        self.display_pat.patnum.setText(self.patnum)
         self.display_pat.lname.setText(self.lname.text())
         self.display_pat.fname.setText(self.fname.text())
         self.display_pat.age.setText(self.age.text())

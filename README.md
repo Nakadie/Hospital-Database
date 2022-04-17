@@ -5,7 +5,7 @@ This is a sample project that I have worked on that is able to take inputs for a
 I realize that SQL is a better database handling tool but at the time of completing the project I was under time constraints to push the project out quickly. I improvised a workable database using the knowlege I already have. I deliberately wrote my classes so that I will be able to implement SQL at a later date. 
 
 Future Updates in order of planned implementation: 
-- SQL upgrade.
+- SQL upgrade. ### finished ####
 - Tests.
 - Time stamped notes under patients file.
 
@@ -22,10 +22,10 @@ Known issues being worked on:
 - Two part names (eg: James Junior) will cause errors due to search functionality of the database.
 
 Versions
-1.0
+1.0 (old)
 -Functionally complete but feature lacking with a .txt based database.
 
-1.5 (Work in progress)
+1.5 (current)
 -Swapped the .txt database with proper SQL db.
 
 
