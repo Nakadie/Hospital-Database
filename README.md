@@ -1,6 +1,7 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 Versions
+
 1.0 (old)
 -Functionally complete but feature lacking with a .txt based database.
 
