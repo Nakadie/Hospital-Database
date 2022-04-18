@@ -1,14 +1,19 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-This is a sample project that I have worked on that is able to take inputs for a new patient and store it in a text file database I created then locate patients in the database to display their data. 
+Versions
+1.0 (old)
+-Functionally complete but feature lacking with a .txt based database.
 
-I realize that SQL is a better database handling tool but at the time of completing the project I was under time constraints to push the project out quickly. I improvised a workable database using the knowlege I already have. I deliberately wrote my classes so that I will be able to implement SQL at a later date. 
+1.5 (current)
+-Swapped the .txt database with proper SQL db.
+
+This is a sample project that I have worked on that is able to take inputs for a new patient and store it in a SQL database then locate patients in the database to display their data. 
 
 Future Updates in order of planned implementation: 
 - SQL upgrade. ### finished ####
 - Tests.
+- ORM.
 - Time stamped notes under patients file.
-
 - Ability to list all patients and select from a list.
 - Edit existing patients.
 - Improve search functionality by removing case sensitivity for names and allow spaces in names.
@@ -20,13 +25,6 @@ Known issues being worked on:
 - Sex not being displayed correctly. ### fixed ###
 - Name case sensitivity search errors.
 - Two part names (eg: James Junior) will cause errors due to search functionality of the database.
-
-Versions
-1.0 (old)
--Functionally complete but feature lacking with a .txt based database.
-
-1.5 (current)
--Swapped the .txt database with proper SQL db.
 
 
 Here is a demo of the project.
