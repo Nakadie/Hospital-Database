@@ -42,8 +42,10 @@ c = conn.cursor()
 
 
 c.execute('DELETE FROM patients WHERE patnum=2')
-c.execute('SELECT * FROM patients')
-
-print(c.fetchall())
+c.execute("""SELECT patnum, lname, fname
+            from patients
+""")
+all = c.fetchall()
+print(all)
 conn.commit()
 conn.close()
