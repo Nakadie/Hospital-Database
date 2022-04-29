@@ -106,7 +106,8 @@ class database(object):
         with conn:
             c.execute('SELECT MAX(patnum) AS maximum FROM patients')
             result = c.fetchall()
-            if result == None:
+            print(result[0][0])
+            if result[0][0] == None:
                 return '1'
             else:
                 return str(int(result[0][0]) + 1)
