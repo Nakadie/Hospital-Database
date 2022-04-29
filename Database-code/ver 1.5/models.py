@@ -55,16 +55,8 @@ class database(object):
 
     def __init__(self):
         self.filename = "patients.db"
-        self.patient_strs = self.initialize_patients()
+        
 
-    def initialize_patients(self):
-        """
-        Get all the patients from the patient_db.txt
-        """
-        txt = open(self.filename, "r")
-        patient_strs = txt.read().splitlines()
-        patient_strs = [x.split() for x in patient_strs]
-        return patient_strs
 
     def add_db(self, pat):
         """
