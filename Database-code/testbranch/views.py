@@ -280,6 +280,7 @@ class PatientsList(QListWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
+        self.display_pat = DisplayPatient()
 
     def initUI(self): 
         
@@ -289,14 +290,37 @@ class PatientsList(QListWidget):
         self.resize(300,120)
         
         for i in models.database().get_all_pats():
-            self.addItem(QListWidgetItem(f"#{i[0]}: {i[1]}, {i[2]}."))
+            self.addItem(QListWidgetItem(f"# {i[0]} : {i[1]}, {i[2]}."))
             
         self.setWindowTitle('Patients List')
-        self.itemClicked.connect(self.Clicked)
+        #self.itemClicked.connect(self.Clicked)
+        self.itemClicked.connect(self.open_patient)
+
+    
 
 
-    def Clicked(self,item):
-        QMessageBox.information(self, "list", "You clicked: "+item.text())
+    def open_patient(self,item):
+        listedpat = item.text()
+        
+        for i in listedpat.split():
+            if i.isdigit() == True:
+                patnum = int(i)
+
+
+        pat = models.database.search_by_patnum(str(patnum))
+        
+        
+        self.display_pat.patnum.setText(str(pat[0][0]))
+        self.display_pat.lname.setText(str(pat[0][1]))
+        self.display_pat.fname.setText(pat[0][2])
+        self.display_pat.age.setText(str(pat[0][3]))
+        self.display_pat.hgt.setText(str(pat[0][5]))
+        self.display_pat.weight.setText(str(pat[0][4]))
+        self.display_pat.blood.setText(pat[0][6])
+        self.display_pat.sex.setText(pat[0][7])
+
+        self.close()
+        self.display_pat.show()
 
       
         
