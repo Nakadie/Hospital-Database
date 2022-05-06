@@ -3,6 +3,7 @@ This is the file for initializing all GUI elements for the database.
 """
 from PySide6.QtWidgets import *
 from PySide6.QtGui import QIntValidator, QDoubleValidator
+from PySide6.QtSql import *
 import models
 
 class MainWindow(QMainWindow):
@@ -26,6 +27,11 @@ class MainWindow(QMainWindow):
         self.btn2.move(150, 50)
         self.btn2.clicked.connect(self.goto_search)
 
+        self.btn3 = QPushButton("List All", self)
+        self.btn3.move(30, 100)
+        self.btn3.clicked.connect(self.list_all)
+        
+
         self.setGeometry(300, 300, 290, 150)
         self.setWindowTitle("Patient Database")
         self.show()
@@ -43,6 +49,13 @@ class MainWindow(QMainWindow):
         """
         self.search = SearchWindow()
         self.search.show()
+    
+    def list_all(self):
+        """
+        Lists all patients. 
+        """
+        self.list = PatientsList()
+        self.list.show()
 
 
 class NewPatientWindow(QDialog):
@@ -261,3 +274,53 @@ class DisplayPatient(QWidget):
         layout.addRow(("Weight (kgs):"), self.weight)
         layout.addRow(("Blood Type:"), self.blood)
         layout.addRow(("Sex:"), self.sex)
+
+class PatientsList(QListWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+        self.display_pat = DisplayPatient()
+
+    def initUI(self): 
+        
+        
+	
+        #Resize width and height
+        self.resize(300,120)
+        
+        for i in models.database().get_all_pats():
+            self.addItem(QListWidgetItem(f"# {i[0]} : {i[1]}, {i[2]}."))
+            
+        self.setWindowTitle('Patients List')
+        #self.itemClicked.connect(self.Clicked)
+        self.itemClicked.connect(self.open_patient)
+
+    
+
+
+    def open_patient(self,item):
+        listedpat = item.text()
+        
+        for i in listedpat.split():
+            if i.isdigit() == True:
+                patnum = int(i)
+
+
+        pat = models.database.search_by_patnum(str(patnum))
+        
+        
+        self.display_pat.patnum.setText(str(pat[0][0]))
+        self.display_pat.lname.setText(str(pat[0][1]))
+        self.display_pat.fname.setText(pat[0][2])
+        self.display_pat.age.setText(str(pat[0][3]))
+        self.display_pat.hgt.setText(str(pat[0][5]))
+        self.display_pat.weight.setText(str(pat[0][4]))
+        self.display_pat.blood.setText(pat[0][6])
+        self.display_pat.sex.setText(pat[0][7])
+
+        self.close()
+        self.display_pat.show()
+
+      
+        

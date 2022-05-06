@@ -7,7 +7,8 @@ conn = sqlite3.connect('patients.db')
 c = conn.cursor()
 
 #create table if doesnt exist
-c.execute(""" CREATE TABLE IF NOT EXISTS patients (
+c.execute(""" 
+            CREATE TABLE IF NOT EXISTS patients (
                 patnum INTEGER PRIMARY KEY AUTOINCREMENT,
                 lname text,
                 fname text,
@@ -17,7 +18,24 @@ c.execute(""" CREATE TABLE IF NOT EXISTS patients (
                 bloodtype text,
                 sex text,
                 UNIQUE (lname, fname, age, weight, height, bloodtype, sex)
-)""")
+                );
+
+                    
+        
+        """)
+
+c.execute("""CREATE TABLE IF NOT EXISTS comments (
+                patnum integer,
+                message text,
+                UNIQUE (message),
+                FOREIGN KEY (patnum) 
+                    REFERENCES patients(patnum)
+                )
+
+
+""")
+
+            
 
 class Patient(object):
     """
@@ -55,7 +73,7 @@ class database(object):
 
     def __init__(self):
         self.filename = "patients.db"
-        
+     
 
 
     def add_db(self, pat):
@@ -103,4 +121,12 @@ class database(object):
                 return '1'
             else:
                 return str(int(result[0][0]) + 1)
+
+    def get_all_pats(self):
+        with conn:
+            c.execute("""SELECT patnum, lname, fname
+            from patients
+                        """)
+            result = c.fetchall()
+            return result
 

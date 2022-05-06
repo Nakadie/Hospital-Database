@@ -7,6 +7,7 @@ Versions
 
 1.5 (current)
 -Swapped the .txt database with proper SQL db.
+-Implemented list function to view all patients.
 
 This is a sample project that I have worked on that is able to take inputs for a new patient and store it in a SQL database then locate patients in the database to display their data. 
 
@@ -15,7 +16,7 @@ Future Updates in order of planned implementation:
 - Tests.
 - ORM.
 - Time stamped notes under patients file.
-- Ability to list all patients and select from a list.
+- Ability to list all patients and select from a list. ### finished ###
 - Edit existing patients.
 - Improve search functionality by removing case sensitivity for names and allow spaces in names.
 
