@@ -1,6 +1,8 @@
 """This file inizilaizes the SQL database"""
 import sqlite3
 
+
+
 conn = sqlite3.connect('patients.db')
 
 #create cursor
@@ -35,7 +37,6 @@ c.execute("""CREATE TABLE IF NOT EXISTS comments (
 
 """)
 
-            
 
 class Patient(object):
     """
@@ -73,8 +74,6 @@ class database(object):
 
     def __init__(self):
         self.filename = "patients.db"
-     
-
 
     def add_db(self, pat):
         """
@@ -101,7 +100,7 @@ class database(object):
         Search by name.
         """
         with conn:
-            c.execute("SELECT * FROM patients WHERE lname =:lname", {'lname': lname})
+            c.execute("SELECT * FROM patients WHERE UPPER(lname) LIKE UPPER(lname)", {'lname': lname})
             return c.fetchall()
 
     def search_by_patnum(num):
@@ -116,7 +115,6 @@ class database(object):
         with conn:
             c.execute('SELECT MAX(patnum) AS maximum FROM patients')
             result = c.fetchall()
-            print(result[0][0])
             if result[0][0] == None:
                 return '1'
             else:

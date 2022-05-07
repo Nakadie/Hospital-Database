@@ -283,9 +283,6 @@ class PatientsList(QListWidget):
         self.display_pat = DisplayPatient()
 
     def initUI(self): 
-        
-        
-	
         #Resize width and height
         self.resize(300,120)
         
@@ -293,11 +290,7 @@ class PatientsList(QListWidget):
             self.addItem(QListWidgetItem(f"# {i[0]} : {i[1]}, {i[2]}."))
             
         self.setWindowTitle('Patients List')
-        #self.itemClicked.connect(self.Clicked)
         self.itemClicked.connect(self.open_patient)
-
-    
-
 
     def open_patient(self,item):
         listedpat = item.text()
@@ -305,10 +298,8 @@ class PatientsList(QListWidget):
         for i in listedpat.split():
             if i.isdigit() == True:
                 patnum = int(i)
-
-
+                
         pat = models.database.search_by_patnum(str(patnum))
-        
         
         self.display_pat.patnum.setText(str(pat[0][0]))
         self.display_pat.lname.setText(str(pat[0][1]))
