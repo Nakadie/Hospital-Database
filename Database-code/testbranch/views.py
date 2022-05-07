@@ -54,7 +54,7 @@ class MainWindow(QMainWindow):
         """
         Lists all patients. 
         """
-        self.list = PatientsList()
+        self.list = PatientsListAll()
         self.list.show()
 
 
@@ -211,6 +211,8 @@ class SearchWindow(QDialog):
 
             self.close()
             self.display_pat.show()
+        elif len(pat) > 1:
+            pass
    
 
     def patnum_search(self):
@@ -283,9 +285,6 @@ class PatientsList(QListWidget):
         self.display_pat = DisplayPatient()
 
     def initUI(self): 
-        
-        
-	
         #Resize width and height
         self.resize(300,120)
         
@@ -293,7 +292,6 @@ class PatientsList(QListWidget):
             self.addItem(QListWidgetItem(f"# {i[0]} : {i[1]}, {i[2]}."))
             
         self.setWindowTitle('Patients List')
-        #self.itemClicked.connect(self.Clicked)
         self.itemClicked.connect(self.open_patient)
 
     
