@@ -154,7 +154,7 @@ class SearchWindow(QDialog):
     def __init__(self):
         super().__init__()
         self.display_pat = DisplayPatient()
-
+        self.patlist_search = PatientsListSearch()
         self.initUI()
 
     def initUI(self):
@@ -212,7 +212,9 @@ class SearchWindow(QDialog):
             self.close()
             self.display_pat.show()
         elif len(pat) > 1:
-            pass
+            self.patlist_search(str(self.lname.text()))
+            self.patlist_search.show()
+            self.close()
    
 
     def patnum_search(self):
@@ -277,7 +279,7 @@ class DisplayPatient(QWidget):
         layout.addRow(("Blood Type:"), self.blood)
         layout.addRow(("Sex:"), self.sex)
 
-class PatientsList(QListWidget):
+class PatientsListAll(QListWidget):
 
     def __init__(self):
         super().__init__()
@@ -294,19 +296,13 @@ class PatientsList(QListWidget):
         self.setWindowTitle('Patients List')
         self.itemClicked.connect(self.open_patient)
 
-    
-
-
     def open_patient(self,item):
         listedpat = item.text()
         
         for i in listedpat.split():
             if i.isdigit() == True:
                 patnum = int(i)
-
-
-        pat = models.database.search_by_patnum(str(patnum))
-        
+        pat = models.database.search_by_patnum(str(patnum)) 
         
         self.display_pat.patnum.setText(str(pat[0][0]))
         self.display_pat.lname.setText(str(pat[0][1]))
@@ -319,6 +315,48 @@ class PatientsList(QListWidget):
 
         self.close()
         self.display_pat.show()
+
+class PatientsListSearch(QListWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+        self.display_pat = DisplayPatient()
+        
+        
+
+    def initUI(self): 
+        #Resize width and height
+        self.resize(300,120)
+        pats = models.database().search_by_lname('dietiker')
+        for i in pats:
+            self.addItem(QListWidgetItem(f"# {i[0]} : {i[1]}, {i[2]}."))
+            
+        self.setWindowTitle('Patients found')
+        self.itemClicked.connect(self.open_patient)
+
+    def open_patient(self,item):
+        listedpat = item.text()
+        
+        for i in listedpat.split():
+            if i.isdigit() == True:
+                patnum = int(i)
+        pat = models.database.search_by_patnum(str(patnum)) 
+        
+        self.display_pat.patnum.setText(str(pat[0][0]))
+        self.display_pat.lname.setText(str(pat[0][1]))
+        self.display_pat.fname.setText(pat[0][2])
+        self.display_pat.age.setText(str(pat[0][3]))
+        self.display_pat.hgt.setText(str(pat[0][5]))
+        self.display_pat.weight.setText(str(pat[0][4]))
+        self.display_pat.blood.setText(pat[0][6])
+        self.display_pat.sex.setText(pat[0][7])
+
+        self.close()
+        self.display_pat.show()
+
+
+
 
       
         
