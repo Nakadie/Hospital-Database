@@ -2,12 +2,15 @@
 
 Versions
 
-1.0 (old)
+1.0 (Depreciated)
 -Functionally complete but feature lacking with a .txt based database.
 
-1.5 (current)
+1.5 (Depreciated)
 -Swapped the .txt database with proper SQL db.
 -Implemented list function to view all patients.
+
+1.6 (Current)
+- Added list functionality for when multiple patients have the same last name. 
 
 This is a sample project that I have worked on that is able to take inputs for a new patient and store it in a SQL database then locate patients in the database to display their data. 
 
@@ -23,12 +26,12 @@ Future Updates in order of planned implementation:
 
 
 Known issues being worked on:
-- Patients who have the same last name cannot be differentiated. 
+- Patients who have the same last name cannot be differentiated. ### fixed 5/9/21 ###
 - Sex not being displayed correctly. ### fixed ###
 - Name case sensitivity search errors.
 - Two part names (eg: James Junior) will cause errors due to search functionality of the database.
 
 
-Here is a demo of the project.
+Here is a demo of the project ver 1.0, new demo will be updated after more features are implemented.
 
 ![](https://github.com/Nakadie/python_projects/blob/main/Projects/Hospital%20tool/Demo.gif)
