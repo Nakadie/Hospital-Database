@@ -280,6 +280,7 @@ class DisplayPatient(QWidget):
         layout.addRow(("Weight (kgs):"), self.weight)
         layout.addRow(("Blood Type:"), self.blood)
         layout.addRow(("Sex:"), self.sex)
+        layout.addRow(QLabel("Patient Notes:"))
 
 class PatientsList(QListWidget):
 
