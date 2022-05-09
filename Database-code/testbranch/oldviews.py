@@ -54,7 +54,7 @@ class MainWindow(QMainWindow):
         """
         Lists all patients. 
         """
-        self.list = PatientsList()
+        self.list = PatientsListAll()
         self.list.show()
 
 
@@ -154,8 +154,7 @@ class SearchWindow(QDialog):
     def __init__(self):
         super().__init__()
         self.display_pat = DisplayPatient()
-        self.list_search = ListSearch()
-
+        self.patlist_search = PatientsListSearch()
         self.initUI()
 
     def initUI(self):
@@ -196,9 +195,11 @@ class SearchWindow(QDialog):
         Will display new window of patient info if found.
         will display a message if not.
         """
-        pat = models.database().search_by_lname(str(self.lname.text()))
+        pat = models.database.search_by_lname(str(self.lname.text()))
+        print(str(self.lname.text()))
+        print(pat)
         
-        if pat == []:
+        if pat == None:
             self.namerr.setText(self.lname.text().capitalize() + ": Not Found")
         elif len(pat) == 1:
             self.display_pat.patnum.setText(str(pat[0][0]))
@@ -212,11 +213,11 @@ class SearchWindow(QDialog):
 
             self.close()
             self.display_pat.show()
-        elif len(pat) > 1:
-            self.close()
-            self.list_search.patname.setText(str(self.lname.text()))
-            self.list_search.display()
-            self.list_search.show()
+        # if len(pat) > 1:
+        #     # self.patlist_search(str(self.lname.text()))
+        #     # self.patlist_search.show()
+        #     # self.close()
+        #     pass
    
 
     def patnum_search(self):
@@ -281,7 +282,7 @@ class DisplayPatient(QWidget):
         layout.addRow(("Blood Type:"), self.blood)
         layout.addRow(("Sex:"), self.sex)
 
-class PatientsList(QListWidget):
+class PatientsListAll(QListWidget):
 
     def __init__(self):
         super().__init__()
@@ -304,8 +305,7 @@ class PatientsList(QListWidget):
         for i in listedpat.split():
             if i.isdigit() == True:
                 patnum = int(i)
-                
-        pat = models.database.search_by_patnum(str(patnum))
+        pat = models.database.search_by_patnum(str(patnum)) 
         
         self.display_pat.patnum.setText(str(pat[0][0]))
         self.display_pat.lname.setText(str(pat[0][1]))
@@ -319,23 +319,23 @@ class PatientsList(QListWidget):
         self.close()
         self.display_pat.show()
 
-class ListSearch(QListWidget):
+class PatientsListSearch(QListWidget):
+
     def __init__(self):
         super().__init__()
-        #self.initUI()
+        self.initUI()
         self.display_pat = DisplayPatient()
-        self.patname = QLabel()
+        
         
 
-    #def initUI(self):
-    def display(self):
+    def initUI(self): 
         #Resize width and height
         self.resize(300,120)
-        
-        for i in models.database().search_by_lname(self.patname.text()):
+        pats = models.database().search_by_lname()
+        for i in pats:
             self.addItem(QListWidgetItem(f"# {i[0]} : {i[1]}, {i[2]}."))
             
-        self.setWindowTitle('Patients List')
+        self.setWindowTitle('Patients found')
         self.itemClicked.connect(self.open_patient)
 
     def open_patient(self,item):
@@ -344,8 +344,7 @@ class ListSearch(QListWidget):
         for i in listedpat.split():
             if i.isdigit() == True:
                 patnum = int(i)
-                
-        pat = models.database.search_by_patnum(str(patnum))
+        pat = models.database.search_by_patnum(str(patnum)) 
         
         self.display_pat.patnum.setText(str(pat[0][0]))
         self.display_pat.lname.setText(str(pat[0][1]))
@@ -358,5 +357,9 @@ class ListSearch(QListWidget):
 
         self.close()
         self.display_pat.show()
+
+
+
+
       
         

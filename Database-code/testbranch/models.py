@@ -95,13 +95,13 @@ class database(object):
                 }
                 )
 
-    def search_by_lname(lname):
+    def search_by_lname(self, lname):
         """
         Search by name.
         """
         with conn:
-            c.execute("SELECT * FROM patients WHERE UPPER(lname) LIKE UPPER(lname)", {'lname': lname})
-            return c.fetchall()
+                c.execute("SELECT * FROM patients WHERE lname =:lname", {'lname': lname})
+                return c.fetchall()
 
     def search_by_patnum(num):
         """
