@@ -63,7 +63,7 @@ class NewPatientWindow(QDialog):
     This "window" is a QDialog.
     It will appear as a free-floating window.
     This window will allow entry for patient data then store it in the patient class
-    then save to the txt file.
+    then save to sql database.
     """
 
     def __init__(self):
@@ -265,6 +265,7 @@ class DisplayPatient(QWidget):
         self.weight = QLabel()
         self.blood = QLabel()
         self.sex = QLabel()
+        self.comments = QListView()
         layout = QFormLayout()
 
         # layout.
@@ -308,6 +309,7 @@ class PatientsList(QListWidget):
                 
         pat = models.database.search_by_patnum(str(patnum))
         
+        #set variables for the new window
         self.display_pat.patnum.setText(str(pat[0][0]))
         self.display_pat.lname.setText(str(pat[0][1]))
         self.display_pat.fname.setText(pat[0][2])
@@ -340,13 +342,14 @@ class ListSearch(QListWidget):
         self.itemClicked.connect(self.open_patient)
 
     def open_patient(self,item):
+        
         listedpat = item.text()
         
         for i in listedpat.split():
             if i.isdigit() == True:
                 patnum = int(i)
                 
-        pat = models.database.search_by_patnum(str(patnum))
+        pat = models.database().search_by_patnum(str(patnum))
         
         self.display_pat.patnum.setText(str(pat[0][0]))
         self.display_pat.lname.setText(str(pat[0][1]))
