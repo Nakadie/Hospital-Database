@@ -5,3 +5,4 @@ __pycache__
 __pycache__\views.cpython-39.pyc
 testing.py
 patients.db
+comments.db
