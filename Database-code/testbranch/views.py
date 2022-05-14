@@ -13,7 +13,7 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         super(MainWindow, self).__init__()
-        self.w = None
+        # self.w = None
         self.initUI()
 
     def initUI(self):
@@ -268,7 +268,8 @@ class DisplayPatient(QWidget):
         self.blood = QLabel()
         self.sex = QLabel()
         self.comments = QListWidget()
-        layout = QFormLayout()
+        self.layout = QFormLayout()
+        self.commbut = QPushButton("New Comment")
         self.comments.setWordWrap(True)
         
         
@@ -276,26 +277,49 @@ class DisplayPatient(QWidget):
         
 
         # layout.
-        self.setLayout(layout)
+        self.setLayout(self.layout)
         self.setGeometry(300, 300, 290, 150)
         self.setWindowTitle("Patient info")
 
-        layout.addRow(("Patient #:"), self.patnum)
-        layout.addRow(("Last Name:"), self.lname)
-        layout.addRow(("First Name:"), self.fname)
-        layout.addRow(("Age:"), self.age)
-        layout.addRow(("Height (cm):"), self.hgt)
-        layout.addRow(("Weight (kgs):"), self.weight)
-        layout.addRow(("Blood Type:"), self.blood)
-        layout.addRow(("Sex:"), self.sex)
-        layout.addRow(QLabel("Patient Notes:"))
-        layout.addRow(self.comments)
+        self.layout.addRow(("Patient #:"), self.patnum)
+        self.layout.addRow(("Last Name:"), self.lname)
+        self.layout.addRow(("First Name:"), self.fname)
+        self.layout.addRow(("Age:"), self.age)
+        self.layout.addRow(("Height (cm):"), self.hgt)
+        self.layout.addRow(("Weight (kgs):"), self.weight)
+        self.layout.addRow(("Blood Type:"), self.blood)
+        self.layout.addRow(("Sex:"), self.sex)
+        self.layout.addRow(QLabel("Patient Notes:"))
+        self.layout.addRow(self.comments)
+        self.layout.addRow(self.commbut)
+
+
+        self.commbut.clicked.connect(self.add_comment)
 
     def list_comments(self):
+        self.comments.clear()
         allcomments = models.database().get_all_comments(self.patnum.text())
-        for i in range(len(allcomments)):
+        for i in reversed(range(len(allcomments))):
             self.comments.addItem(QListWidgetItem(f"""----------{allcomments[i][1]}----------\n {allcomments[i][0]}\n"""))
             
+
+    def add_comment(self):
+        self.newcomm = QPlainTextEdit()
+        self.addcommbut = QPushButton("Add")
+        self.commbut.setEnabled(False)
+        self.layout.addRow(self.newcomm)
+        self.layout.addRow(self.addcommbut)
+        self.addcommbut.clicked.connect(self.restore)
+
+    def restore(self):
+        if self.newcomm.toPlainText() != '':
+            models.database().write_comment(self.newcomm.toPlainText(), self.patnum.text())
+        self.layout.removeRow(self.newcomm)
+        self.layout.removeRow(self.addcommbut)
+        self.commbut.setEnabled(True)
+        self.list_comments()
+        
+
 
 class PatientsList(QListWidget):
 
@@ -346,11 +370,9 @@ class ListSearch(QListWidget):
         
         
 
-        #temporary solution. further research and optimization requred. 
+        #temporary solution. Further research and optimization requred. 
         self.patname = QLabel()
         
-
-    #def initUI(self):
     def display(self):
         #Resize width and height
         self.resize(300,120)
@@ -383,5 +405,3 @@ class ListSearch(QListWidget):
 
         self.close()
         self.display_pat.show()
-      
-        
