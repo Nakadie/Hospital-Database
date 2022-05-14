@@ -37,4 +37,4 @@ Known issues being worked on:
 
 Here is a demo of the project ver 1.0, new demo will be updated after more features are implemented.
 
-![](https://github.com/Nakadie/python_projects/blob/main/Projects/Hospital%20tool/Demo.gif)
+![](https://github.com/Nakadie/Hospital-Database/blob/main/ver2%20demo.gif)
