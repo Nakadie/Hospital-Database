@@ -265,8 +265,13 @@ class DisplayPatient(QWidget):
         self.weight = QLabel()
         self.blood = QLabel()
         self.sex = QLabel()
-        self.comments = QListView()
+        self.comments = QListWidget()
         layout = QFormLayout()
+        self.comments.setWordWrap(True)
+        
+        
+ 
+        
 
         # layout.
         self.setLayout(layout)
@@ -282,13 +287,20 @@ class DisplayPatient(QWidget):
         layout.addRow(("Blood Type:"), self.blood)
         layout.addRow(("Sex:"), self.sex)
         layout.addRow(QLabel("Patient Notes:"))
+        layout.addRow(self.comments)
+
+    def list_comments(self):
+        allcomments = models.database().get_all_comments(self.patnum.text())
+        for i in range(len(allcomments)):
+            self.comments.addItem(QListWidgetItem(f"""----------{allcomments[i][1]}----------\n {allcomments[i][0]}\n"""))
+            
 
 class PatientsList(QListWidget):
 
     def __init__(self):
         super().__init__()
         self.initUI()
-        self.display_pat = DisplayPatient()
+        
 
     def initUI(self): 
         #Resize width and height
@@ -301,13 +313,16 @@ class PatientsList(QListWidget):
         self.itemClicked.connect(self.open_patient)
 
     def open_patient(self,item):
+        
         listedpat = item.text()
         
         for i in listedpat.split():
             if i.isdigit() == True:
                 patnum = int(i)
-                
-        pat = models.database.search_by_patnum(str(patnum))
+                break
+               
+        self.display_pat = DisplayPatient()        
+        pat = models.database().search_by_patnum(str(patnum))
         
         #set variables for the new window
         self.display_pat.patnum.setText(str(pat[0][0]))
@@ -318,6 +333,7 @@ class PatientsList(QListWidget):
         self.display_pat.weight.setText(str(pat[0][4]))
         self.display_pat.blood.setText(pat[0][6])
         self.display_pat.sex.setText(pat[0][7])
+        self.display_pat.list_comments()
 
         self.close()
         self.display_pat.show()
@@ -325,8 +341,10 @@ class PatientsList(QListWidget):
 class ListSearch(QListWidget):
     def __init__(self):
         super().__init__()
-        #self.initUI()
-        self.display_pat = DisplayPatient()
+        
+        
+
+        #temporary solution. further research and optimization requred. 
         self.patname = QLabel()
         
 
@@ -342,7 +360,7 @@ class ListSearch(QListWidget):
         self.itemClicked.connect(self.open_patient)
 
     def open_patient(self,item):
-        
+        self.display_pat = DisplayPatient()
         listedpat = item.text()
         
         for i in listedpat.split():

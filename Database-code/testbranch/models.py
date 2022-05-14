@@ -151,7 +151,7 @@ class database(object):
         Will retrieve all patietents from the database
         """
         with self.patconn:
-            self.patc.execute("""SELECT patnum, lname, fnamefrom patients """)
+            self.patc.execute("""SELECT patnum, lname, fname FROM patients """)
             result = self.patc.fetchall()
             return result
 
@@ -161,7 +161,10 @@ class database(object):
         num: a string of the patient number.
         """
         with self.comconn:
-            self.comc.execute("""SELECT comment, date_time FROM patients WHERE patnum =:patnum""", {'patnum': num})
+            self.comc.execute("""SELECT comment, date_time FROM comments WHERE patnum =:patnum""", {'patnum': num})
+            result = self.comc.fetchall()
+            return result 
+            
 
     def write_comment(self, comment, num):
         """
@@ -170,12 +173,12 @@ class database(object):
         num: patient number as a string.
         """
         now = datetime.datetime.now()
-        # print(f"""----------{now.month}/{now.day}/{now.year} {now.hour}:{now.minute}----------\n {comment}""")
         with self.comconn:
-            self.comc.execute("INSERT INTO comments ( comment, patnum, date_time) VALUES (:comment, :patnum, :datetime)",
+            self.comc.execute("INSERT INTO comments ( comment, patnum, date_time) VALUES (:comment, :patnum, :date_time)",
             {
                 'comment': comment,
                 'patnum': num,
                 'date_time': f"{now.month}/{now.day}/{now.year} {now.hour}:{now.minute}"
             }
             )
+            
