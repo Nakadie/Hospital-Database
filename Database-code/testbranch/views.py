@@ -209,6 +209,7 @@ class SearchWindow(QDialog):
             self.display_pat.weight.setText(str(pat[0][4]))
             self.display_pat.blood.setText(pat[0][6])
             self.display_pat.sex.setText(pat[0][7])
+            self.display_pat.list_comments()
 
             self.close()
             self.display_pat.show()
@@ -237,6 +238,7 @@ class SearchWindow(QDialog):
             self.display_pat.weight.setText(str(pat[0][4]))
             self.display_pat.blood.setText(pat[0][6])
             self.display_pat.sex.setText(pat[0][7])
+            self.display_pat.list_comments()
 
             self.close()
             self.display_pat.show()
@@ -377,6 +379,7 @@ class ListSearch(QListWidget):
         self.display_pat.weight.setText(str(pat[0][4]))
         self.display_pat.blood.setText(pat[0][6])
         self.display_pat.sex.setText(pat[0][7])
+        self.display_pat.list_comments()
 
         self.close()
         self.display_pat.show()
