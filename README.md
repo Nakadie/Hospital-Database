@@ -35,6 +35,6 @@ Known issues being worked on:
 - Two part names (eg: James Junior) will cause errors due to search functionality of the database.
 
 
-Here is a demo of the project ver 1.0, new demo will be updated after more features are implemented.
+Here is a demo of the project ver 2.0.
 
 ![](https://github.com/Nakadie/Hospital-Database/blob/main/ver2%20demo.gif)
