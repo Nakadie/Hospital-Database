@@ -297,6 +297,9 @@ class DisplayPatient(QWidget):
         self.commbut.clicked.connect(self.add_comment)
 
     def list_comments(self):
+        """
+        Will list all the comments in the comments box with the most recent comment at the top of the list.
+        """
         self.comments.clear()
         allcomments = models.database().get_all_comments(self.patnum.text())
         for i in reversed(range(len(allcomments))):
@@ -304,6 +307,9 @@ class DisplayPatient(QWidget):
             
 
     def add_comment(self):
+        """
+        This will add a new box to type a comment in and send the text to the sqldb.
+        """
         self.newcomm = QPlainTextEdit()
         self.addcommbut = QPushButton("Add")
         self.commbut.setEnabled(False)
@@ -312,6 +318,9 @@ class DisplayPatient(QWidget):
         self.addcommbut.clicked.connect(self.restore)
 
     def restore(self):
+        """
+        This will delete the extra boxes and update the comment box with the new comment.
+        """
         if self.newcomm.toPlainText() != '':
             models.database().write_comment(self.newcomm.toPlainText(), self.patnum.text())
         self.layout.removeRow(self.newcomm)

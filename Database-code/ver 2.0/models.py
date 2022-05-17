@@ -15,7 +15,6 @@ class Patient(object):
         Initializes a patient with patient number, last name, firstname, age, weight, height, bloodtype, sex.
         """
         
-        
         self.lname = lname.capitalize()
         self.fname = fname.capitalize()
         self.age = age
@@ -23,15 +22,6 @@ class Patient(object):
         self.height = height
         self.bloodtype = bloodtype
         self.sex = sex
-
-    # @classmethod
-    # def get_all_pats(cls):
-    #     """
-    #     Get all the patients from the patients.db and initialize them to a class and put in a list.
-    #     """
-    #     c.execute('SELECT * FROM patients')
-    #     return c.fetchall
-
 
 class database(object):
     """
