@@ -3,11 +3,11 @@
 Versions
 
 1.0 (Depreciated)
--Functionally complete but feature lacking with a .txt based database.
+- Functionally complete but feature lacking with a .txt based database.
 
 1.5 (Depreciated)
--Swapped the .txt database with proper SQL db.
--Implemented list function to view all patients.
+- Swapped the .txt database with proper SQL db.
+- Implemented list function to view all patients.
 
 1.6 (Depreciated)
 - Added list functionality for when multiple patients have the same last name. 
